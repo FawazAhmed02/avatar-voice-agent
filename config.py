@@ -72,6 +72,7 @@ class AvatarConfig:
     viseme_smoothing: float = 0.3
     amplitude_window_ms: int = 20
     output_mode: str = "stdout"
+    ws_port: int = 8765
 
 
 @dataclass
@@ -204,6 +205,7 @@ def _build_config(raw: dict) -> AppConfig:
             viseme_smoothing=float(avatar_raw.get("viseme_smoothing", AvatarConfig.viseme_smoothing)),
             amplitude_window_ms=int(avatar_raw.get("amplitude_window_ms", AvatarConfig.amplitude_window_ms)),
             output_mode=str(avatar_raw.get("output_mode", AvatarConfig.output_mode)),
+            ws_port=int(avatar_raw.get("ws_port", AvatarConfig.ws_port)),
         ),
         system=SystemConfig(
             device=str(system_raw.get("device", SystemConfig.device)),

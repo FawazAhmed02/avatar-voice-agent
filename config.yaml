@@ -34,7 +34,8 @@ tts:
 avatar:
   viseme_smoothing: 0.3
   amplitude_window_ms: 20
-  output_mode: "stdout"   # stdout | websocket | file
+  output_mode: "websocket"
+  ws_port: 8765
 
 system:
   device: "mlx"

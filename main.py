@@ -24,6 +24,15 @@ from typing import Any, Dict, List, Optional
 
 import queue as sync_queue
 import threading
+import webbrowser
+from pathlib import Path as _Path
+
+try:
+    import websockets
+    import websockets.server
+    _WS_AVAILABLE = True
+except ImportError:
+    _WS_AVAILABLE = False
 
 import click
 from rich.console import Console
@@ -71,6 +80,27 @@ class PipelineState:
         self.latencies: Dict[str, float] = {}
         self.shutdown_event: asyncio.Event = asyncio.Event()
         self.pipeline_busy: threading.Event = threading.Event()
+        self.ws_clients: set = set()
+
+    async def ws_broadcast(self, msg: dict) -> None:
+        if not self.ws_clients:
+            return
+        data = json.dumps(msg)
+        dead = set()
+        for ws in list(self.ws_clients):
+            try:
+                await ws.send(data)
+            except Exception:
+                dead.add(ws)
+        self.ws_clients -= dead
+
+
+async def _ws_handler(websocket, state: PipelineState) -> None:
+    state.ws_clients.add(websocket)
+    try:
+        await websocket.wait_closed()
+    finally:
+        state.ws_clients.discard(websocket)
 
 
 # ---------------------------------------------------------------------------
@@ -204,6 +234,8 @@ async def stt_stage(state: PipelineState) -> None:
 
         if text:
             console.print(f"[cyan]You:[/cyan] {text}")
+            await state.ws_broadcast({"type": "transcript", "role": "user", "text": text})
+            await state.ws_broadcast({"type": "status", "value": "processing"})
             await asyncio.wait_for(
                 state.stt_q.put({"text": text, "t_stt": time.perf_counter()}),
                 timeout=cfg.system.pipeline_timeout_s,
@@ -258,6 +290,8 @@ async def rag_stage(state: PipelineState) -> None:
             state.latencies["rag"] = elapsed_ms
             state.latencies["llm"] = 0.0
             console.print(f"[bold green]Assistant:[/bold green] {cached_answer} [dim](cached)[/dim]")
+            await state.ws_broadcast({"type": "transcript", "role": "assistant", "text": cached_answer})
+            await state.ws_broadcast({"type": "status", "value": "speaking"})
             await asyncio.wait_for(
                 state.llm_q.put({"response": cached_answer, "t_llm": time.perf_counter()}),
                 timeout=cfg.system.pipeline_timeout_s,
@@ -348,6 +382,8 @@ async def llm_stage(state: PipelineState) -> None:
 
             full_parts.append(sentence)
             console.print(f"[bold green]Assistant:[/bold green] {sentence}")
+            await state.ws_broadcast({"type": "transcript", "role": "assistant", "text": sentence})
+            await state.ws_broadcast({"type": "status", "value": "speaking"})
 
             # Send each sentence to TTS immediately — don't wait for full response
             try:
@@ -381,10 +417,21 @@ async def tts_stage(state: PipelineState) -> None:
     def _release():
         with _lock:
             _in_flight[0] -= 1
-            if _in_flight[0] <= 0:
-                _in_flight[0] = 0
-                state.pipeline_busy.clear()
-                logger.debug("Pipeline idle — ready for next input")
+            if _in_flight[0] > 0:
+                return
+            _in_flight[0] = 0
+
+        # Cooldown: wait for physical audio to finish reverberating before
+        # re-enabling the mic, otherwise the speaker output echoes back in.
+        def _delayed_clear():
+            time.sleep(0.7)
+            state.pipeline_busy.clear()
+            logger.debug("Pipeline idle — ready for next input")
+            asyncio.get_event_loop().call_soon_threadsafe(
+                lambda: asyncio.ensure_future(state.ws_broadcast({"type": "status", "value": "listening"}))
+            )
+
+        threading.Thread(target=_delayed_clear, daemon=True, name="tts-cooldown").start()
 
     while not state.shutdown_event.is_set():
         try:
@@ -428,7 +475,6 @@ async def tts_stage(state: PipelineState) -> None:
 
 
 async def avatar_stage(state: PipelineState) -> None:
-    """Output viseme events for avatar animation."""
     cfg = get_config()
     output_mode: str = cfg.avatar.output_mode
     logger.info("Avatar stage ready (output_mode=%s).", output_mode)
@@ -441,19 +487,29 @@ async def avatar_stage(state: PipelineState) -> None:
 
         state.active_stage = "Avatar"
         visemes = item.get("visemes", [])
+        t_play = item.get("t_tts", time.perf_counter())
 
-        if output_mode == "stdout":
-            for event in visemes:
-                print(json.dumps(event), flush=True)
-        elif output_mode == "file":
-            import os
-            out_path = os.path.join(
-                os.path.dirname(__file__), "viseme_output.jsonl"
-            )
-            with open(out_path, "a", encoding="utf-8") as fh:
-                for event in visemes:
-                    fh.write(json.dumps(event) + "\n")
-        # websocket mode: would require an additional ws server (omitted for offline kiosk)
+        for event in visemes:
+            target_ms = event["time_ms"]
+            elapsed_ms = (time.perf_counter() - t_play) * 1000
+            sleep_s = (target_ms - elapsed_ms) / 1000
+            if sleep_s > 0.005:
+                await asyncio.sleep(sleep_s)
+
+            msg = {"type": "viseme", "viseme": event["viseme"], "amplitude": event["amplitude"]}
+
+            if output_mode == "stdout":
+                print(json.dumps(msg), flush=True)
+            elif output_mode == "websocket":
+                await state.ws_broadcast(msg)
+            elif output_mode == "file":
+                import os
+                out_path = os.path.join(os.path.dirname(__file__), "viseme_output.jsonl")
+                with open(out_path, "a", encoding="utf-8") as fh:
+                    fh.write(json.dumps(msg) + "\n")
+
+        # Send silence at end
+        await state.ws_broadcast({"type": "viseme", "viseme": "sil", "amplitude": 0.0})
 
         state.tts_q.task_done()
         state.active_stage = "idle"
@@ -502,6 +558,16 @@ async def _run_pipeline() -> None:
         except NotImplementedError:
             pass  # Windows
 
+    # Start WebSocket server
+    ws_server = None
+    if _WS_AVAILABLE:
+        import websockets
+        ws_server = await websockets.serve(
+            lambda ws, _p=None: _ws_handler(ws, state),
+            "localhost", 8765
+        )
+        logger.info("WebSocket server started on ws://localhost:8765")
+
     tasks = [
         asyncio.create_task(vad_stage(state), name="vad"),
         asyncio.create_task(stt_stage(state), name="stt"),
@@ -521,6 +587,15 @@ async def _run_pipeline() -> None:
 
     # Pre-warm all models before listening starts
     await _prewarm_models()
+
+    # Open UI in browser
+    ui_path = _Path(__file__).parent / "ui" / "index.html"
+    if ui_path.exists():
+        webbrowser.open(f"file://{ui_path}")
+        console.print("[cyan]Avatar UI opened in browser.[/cyan]")
+
+    # Broadcast initial status
+    await state.ws_broadcast({"type": "status", "value": "listening"})
 
     # Refresh live display every 500ms (rendered on stderr to avoid clashing with logs)
     try:
@@ -542,6 +617,11 @@ async def _run_pipeline() -> None:
             task.cancel()
 
     await asyncio.gather(*tasks, return_exceptions=True)
+
+    if ws_server:
+        ws_server.close()
+        await ws_server.wait_closed()
+
     console.print("[bold green]Pipeline stopped.[/bold green]")
 
 
