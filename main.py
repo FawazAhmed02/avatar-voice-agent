@@ -231,6 +231,7 @@ async def stt_stage(state: PipelineState) -> None:
 
         elapsed_ms = (time.perf_counter() - t0) * 1000
         state.latencies["stt"] = elapsed_ms
+        await state.ws_broadcast({"type": "latency", "stage": "stt", "ms": round(elapsed_ms)})
 
         if text:
             console.print(f"[cyan]You:[/cyan] {text}")
@@ -289,6 +290,8 @@ async def rag_stage(state: PipelineState) -> None:
             elapsed_ms = (time.perf_counter() - t0) * 1000
             state.latencies["rag"] = elapsed_ms
             state.latencies["llm"] = 0.0
+            await state.ws_broadcast({"type": "latency", "stage": "rag", "ms": round(elapsed_ms), "cached": True})
+            await state.ws_broadcast({"type": "latency", "stage": "llm", "ms": 0, "cached": True})
             console.print(f"[bold green]Assistant:[/bold green] {cached_answer} [dim](cached)[/dim]")
             await state.ws_broadcast({"type": "transcript", "role": "assistant", "text": cached_answer})
             await state.ws_broadcast({"type": "status", "value": "speaking"})
@@ -308,6 +311,7 @@ async def rag_stage(state: PipelineState) -> None:
 
         elapsed_ms = (time.perf_counter() - t0) * 1000
         state.latencies["rag"] = elapsed_ms
+        await state.ws_broadcast({"type": "latency", "stage": "rag", "ms": round(elapsed_ms)})
 
         await asyncio.wait_for(
             state.rag_q.put({"query": query, "chunks": chunks, "t_rag": time.perf_counter()}),
@@ -379,6 +383,7 @@ async def llm_stage(state: PipelineState) -> None:
             if first_sentence:
                 state.latencies["llm"] = (time.perf_counter() - t0) * 1000
                 first_sentence = False
+                await state.ws_broadcast({"type": "latency", "stage": "llm", "ms": round(state.latencies["llm"])})
 
             full_parts.append(sentence)
             console.print(f"[bold green]Assistant:[/bold green] {sentence}")
@@ -459,6 +464,7 @@ async def tts_stage(state: PipelineState) -> None:
 
         elapsed_ms = (time.perf_counter() - t0) * 1000
         state.latencies["tts"] = elapsed_ms
+        await state.ws_broadcast({"type": "latency", "stage": "tts", "ms": round(elapsed_ms)})
 
         engine.play_audio(audio, done_callback=_release)
 

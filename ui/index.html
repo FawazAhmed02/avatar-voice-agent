@@ -255,6 +255,47 @@
       50%      { transform: scaleY(1);   opacity: 1;   }
     }
 
+    /* ── Latency metrics ───────────────────────────── */
+    #metrics {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transition: opacity 0.5s;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    #metrics.show { opacity: 1; }
+
+    .m-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      min-width: 52px;
+    }
+    .m-label {
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .m-val {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: color 0.3s;
+    }
+    .m-stage.cached .m-val { color: var(--listening); }
+    .m-stage.total  .m-val { color: var(--accent); }
+
+    .m-div {
+      width: 1px; height: 24px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
     /* ── Chat section ──────────────────────────────── */
     #chat-wrap {
       width: 100%;
@@ -404,6 +445,18 @@
           <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
         </div>
       </div>
+    </div>
+
+    <div id="metrics">
+      <div class="m-stage" id="ms-stt"><span class="m-label">STT</span><span class="m-val" id="mv-stt">—</span></div>
+      <div class="m-div"></div>
+      <div class="m-stage" id="ms-rag"><span class="m-label">RAG</span><span class="m-val" id="mv-rag">—</span></div>
+      <div class="m-div"></div>
+      <div class="m-stage" id="ms-llm"><span class="m-label">LLM</span><span class="m-val" id="mv-llm">—</span></div>
+      <div class="m-div"></div>
+      <div class="m-stage" id="ms-tts"><span class="m-label">TTS</span><span class="m-val" id="mv-tts">—</span></div>
+      <div class="m-div"></div>
+      <div class="m-stage total" id="ms-total"><span class="m-label">Total</span><span class="m-val" id="mv-total">—</span></div>
     </div>
 
     <div id="chat-wrap">
@@ -816,6 +869,34 @@ function addMessage(role, text) {
 // ─── WebSocket ────────────────────────────────────────────────────────────────
 const connBadge = document.getElementById('conn-badge');
 const connLabel = document.getElementById('conn-label');
+// ─── Latency metrics ──────────────────────────────────────────────────────────
+const metricBox = document.getElementById('metrics');
+const STAGES = ['stt', 'rag', 'llm', 'tts'];
+const latencies = {};
+
+function resetMetrics() {
+  STAGES.forEach(s => {
+    latencies[s] = null;
+    document.getElementById(`ms-${s}`).classList.remove('cached');
+    document.getElementById(`mv-${s}`).textContent = '…';
+  });
+  document.getElementById('mv-total').textContent = '…';
+}
+
+function updateMetric(stage, ms, cached) {
+  latencies[stage] = ms;
+  const box = document.getElementById(`ms-${stage}`);
+  const val = document.getElementById(`mv-${stage}`);
+  if (!box || !val) return;
+  box.classList.toggle('cached', !!cached);
+  val.textContent = cached ? '⚡ cached' : `${ms} ms`;
+  const known = STAGES.map(s => latencies[s]).filter(v => v != null);
+  if (known.length > 0)
+    document.getElementById('mv-total').textContent =
+      `${Math.round(known.reduce((a, b) => a + b, 0))} ms`;
+  metricBox.classList.add('show');
+}
+
 let ws = null, reconnTimer = null;
 
 function connect() {
@@ -831,8 +912,9 @@ function connect() {
   ws.onmessage = ({ data }) => {
     let m; try { m = JSON.parse(data); } catch { return; }
     if      (m.type === 'viseme')     setViseme(m.viseme, m.amplitude);
-    else if (m.type === 'status')     setStatus(m.value);
+    else if (m.type === 'status')     { setStatus(m.value); if (m.value === 'processing') resetMetrics(); }
     else if (m.type === 'transcript') addMessage(m.role, m.text);
+    else if (m.type === 'latency')    updateMetric(m.stage, m.ms, m.cached);
   };
 
   ws.onerror = () => {
