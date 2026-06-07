@@ -1,0 +1,42 @@
+vad:
+  threshold: 0.7
+  silence_duration_ms: 280
+  sample_rate: 16000
+  chunk_size: 512
+
+stt:
+  model: "mlx-community/whisper-tiny.en-mlx"
+  language: "en"
+
+rag:
+  docs_dir: "./docs"
+  index_path: "./rag_index.faiss"
+  metadata_path: "./rag_metadata.pkl"
+  embedding_model: "all-MiniLM-L6-v2"
+  chunk_size: 300
+  chunk_overlap: 50
+  top_k: 3
+
+llm:
+  model: "mlx-community/Qwen2.5-1.5B-Instruct-4bit"
+  max_tokens: 80
+  temperature: 0.0
+  top_p: 1.0
+  stream_chunk_words: 5
+  ttft_target_ms: 100
+
+tts:
+  model_path: "./tts_models/en_US-lessac-medium.onnx"
+  sample_rate: 22050
+  speaking_rate: 1.0
+  volume: 1.0
+
+avatar:
+  viseme_smoothing: 0.3
+  amplitude_window_ms: 20
+  output_mode: "stdout"   # stdout | websocket | file
+
+system:
+  device: "mlx"
+  log_level: "INFO"
+  pipeline_timeout_s: 10
