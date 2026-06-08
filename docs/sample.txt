@@ -1,23 +1,99 @@
-The hospital provides twenty four hour emergency and pharmacy services for all patients and visitors. Emergency consultation charges vary depending on the severity of the medical condition, while the pharmacy remains open throughout the day and night to ensure uninterrupted access to medicines and emergency supplies.
+The hospital operates twenty four hours a day and provides emergency medical services for both adults and children. The emergency department is equipped to handle trauma cases, cardiac emergencies, respiratory distress, fractures, burns, and other urgent medical situations. Emergency staff includes physicians, nurses, and on call specialists who are available throughout the day and night.
 
-The Cardiology Department provides consultation and diagnostic services for heart related conditions. The cardiology specialist is available from Monday to Friday between 9 AM and 1 PM. Patients experiencing chest pain, high blood pressure, or other cardiac symptoms are encouraged to schedule an appointment in advance.
+The Cardiology Department specializes in diagnosing and treating heart related conditions including hypertension, coronary artery disease, arrhythmias, and heart failure. Cardiology consultations are available Monday to Friday from 9 AM to 1 PM. Diagnostic services include ECG, echocardiography, stress testing, and cardiac monitoring.
 
-The Orthopedic Department specializes in bone, joint, and muscle related treatments. Orthopedic consultations are available on weekdays from 2 PM to 6 PM. The department also provides fracture management, physiotherapy referrals, and post surgery follow up care.
+Patients experiencing symptoms such as chest pain, dizziness, shortness of breath, or irregular heartbeat are advised to visit the Cardiology Department immediately or seek emergency care if symptoms are severe. Follow up appointments can be booked through the hospital reception or online portal.
 
-The Pediatrics clinic offers healthcare services for infants, children, and teenagers. Pediatric consultations are available daily from 10 AM to 8 PM including Saturdays. The department provides vaccination services, routine checkups, and treatment for common childhood illnesses.
+The Orthopedic Department provides treatment for bone fractures, sports injuries, arthritis, spine disorders, and joint pain. Orthopedic specialists are available on weekdays from 2 PM to 6 PM. The department also coordinates physiotherapy sessions and rehabilitation plans for patients recovering from surgery or injury.
 
-The hospital laboratory provides diagnostic testing and sample collection services every day from 7 AM until 10 PM. Common laboratory services include blood tests, urine analysis, COVID screening, and routine diagnostic panels. Most reports are available digitally through the patient portal.
+The Pediatrics clinic provides healthcare services for newborns, children, and adolescents. Pediatricians are available daily from 10 AM to 8 PM including Saturdays. Services include vaccinations, nutritional counseling, growth monitoring, treatment for infections, and routine medical checkups.
 
-MRI and radiology services are available daily between 9 AM and 9 PM. MRI scans require prior appointment booking, while X ray and ultrasound services are available for walk in patients depending on queue availability.
+The Gynecology and Obstetrics Department offers prenatal care, ultrasound services, fertility consultations, and maternity support. Pregnant patients are encouraged to attend regular prenatal visits throughout pregnancy to monitor maternal and fetal health.
 
-Patients can book appointments through the hospital reception desk, online portal, or self service kiosk. Walk in patients are also accepted depending on doctor availability and current queue capacity.
+The Dermatology Department treats skin conditions including acne, eczema, psoriasis, fungal infections, allergies, and hair related disorders. Dermatology consultations are available from Monday to Thursday between 11 AM and 4 PM.
 
-The hospital accepts multiple payment methods including cash, debit cards, credit cards, and digital wallet payments. Major insurance providers including Jubilee Insurance, EFU Health, and State Life are also accepted for eligible treatments and consultations.
+The Neurology Department diagnoses and treats conditions affecting the brain and nervous system such as migraines, epilepsy, stroke, neuropathy, and Parkinson related symptoms. Neurology appointments require prior booking due to specialist availability.
 
-Visitor timings are from 5 PM to 8 PM daily. Visitors are encouraged to follow hospital safety guidelines and maintain silence in patient care areas. Masks are mandatory in intensive care units and recommended throughout the hospital premises.
+The hospital laboratory operates daily from 7 AM until 10 PM and performs blood tests, urine analysis, hormone testing, microbiology screening, and pathology diagnostics. Emergency laboratory services remain available twenty four hours for admitted and emergency patients.
 
-Patients seeking hospital admission must provide a valid CNIC, previous medical records, and insurance information where applicable. The admissions department operates twenty four hours and assists patients with room allocation, billing, and admission formalities.
+Patients can collect laboratory reports physically from the lab reception or digitally through the hospital patient portal. Most routine blood reports are available within six to eight hours while specialized tests may require additional processing time.
 
-The vaccination center provides childhood and adult immunization services from Monday to Saturday between 9 AM and 5 PM. Vaccines for hepatitis, influenza, tetanus, and routine childhood immunizations are available.
+Radiology services include X ray, ultrasound, CT scan, MRI, and mammography. MRI appointments are scheduled in advance while X ray and ultrasound services may accept walk in patients depending on queue availability and technician scheduling.
 
-Parking facilities are available in Basement Levels 1 and 2 for visitors and patients. Parking charges are calculated on an hourly basis, and valet parking is available during peak hospital hours.
+The MRI unit operates from 9 AM until 9 PM daily. Patients undergoing MRI scans are advised to avoid carrying metallic objects and should inform staff if they have implants, pacemakers, or claustrophobia.
+
+The hospital pharmacy remains open twenty four hours a day and provides prescription medicines, over the counter medications, medical devices, and emergency supplies. Pharmacists are available to assist patients with dosage instructions and medication guidance.
+
+Patients can book appointments through the hospital reception desk, self service kiosk, mobile application, or official website. Appointment confirmations are sent through SMS and email where applicable.
+
+Walk in patients are accepted based on doctor availability and queue capacity. During peak hours patients may experience longer waiting times, especially in general OPD and emergency services.
+
+The General OPD consultation fee is 1500 Pakistani Rupees. Specialist consultation fees vary by department and physician expertise. Cardiology consultations cost 3500 Pakistani Rupees while orthopedic consultations cost 3000 Pakistani Rupees.
+
+Emergency consultation charges begin from 5000 Pakistani Rupees and may increase depending on diagnostic procedures, specialist involvement, and emergency treatment requirements.
+
+The hospital accepts cash payments, debit cards, credit cards, bank transfers, and selected digital wallet services. Payment receipts are issued electronically and physically after successful billing.
+
+Insurance providers accepted by the hospital include Jubilee Insurance, EFU Health, State Life, Adamjee Insurance, and selected corporate healthcare plans. Patients are advised to confirm policy coverage before treatment.
+
+Patients seeking admission must provide a valid CNIC, previous medical records, insurance documentation where applicable, and emergency contact details. International patients may also be required to provide passport information.
+
+The admissions department operates twenty four hours and assists patients with room allocation, billing, insurance coordination, and inpatient registration procedures.
+
+The hospital offers multiple room categories including general ward, semi private rooms, private rooms, and executive suites. Room charges vary according to accommodation type and available facilities.
+
+Visitor timings are from 5 PM to 8 PM daily. Visitors are requested to maintain silence in patient care areas and follow hospital infection control guidelines during their visit.
+
+Masks are mandatory in intensive care units, emergency departments, and isolation wards. Hand sanitizing stations are available throughout the hospital premises for infection prevention.
+
+The Intensive Care Unit operates twenty four hours and provides critical care support for patients requiring close medical monitoring, ventilator support, or advanced treatment.
+
+The Neonatal Intensive Care Unit specializes in the treatment and monitoring of premature and critically ill newborn babies. Parents are allowed limited visitation based on NICU safety protocols.
+
+The vaccination center provides childhood and adult immunization services from Monday to Saturday between 9 AM and 5 PM. Vaccines include hepatitis, influenza, tetanus, polio, typhoid, and routine childhood immunizations.
+
+COVID related vaccination and screening services are available depending on government health policies and vaccine stock availability.
+
+The physiotherapy department assists patients recovering from surgery, sports injuries, neurological disorders, and chronic pain conditions. Treatment plans are customized according to patient mobility and rehabilitation goals.
+
+The dental clinic provides tooth extraction, scaling, fillings, root canal treatment, braces consultation, and cosmetic dental procedures. Dental appointments are available from Monday to Saturday between 10 AM and 6 PM.
+
+The hospital cafeteria serves meals, snacks, tea, coffee, and beverages for visitors and staff. Cafeteria services are available from 7 AM until midnight every day.
+
+Parking facilities are available in Basement Levels 1 and 2 with hourly parking charges for visitors and attendants. Valet parking services are available during peak hours near the main entrance.
+
+Wheelchair assistance is available at all major entrances and reception areas. Patients requiring mobility support can request wheelchairs from hospital staff free of charge.
+
+The hospital provides ambulance services for emergency patient transportation within city limits. Ambulances are equipped with oxygen support, emergency medical kits, and trained emergency staff.
+
+The blood bank operates twenty four hours and supports emergency transfusion requirements, blood donation drives, and inpatient transfusion requests. Blood donors are required to present valid identification.
+
+The dialysis unit provides treatment for patients with kidney related conditions and chronic renal failure. Dialysis appointments are scheduled in multiple shifts throughout the week.
+
+The oncology department offers cancer screening, chemotherapy sessions, oncology consultations, and follow up treatment planning. Patients undergoing chemotherapy are advised to follow specialist dietary and medication guidance.
+
+Mental health and psychiatric counseling services are available for patients experiencing stress, anxiety, depression, trauma, and behavioral health concerns. Appointments with psychiatrists and psychologists require prior scheduling.
+
+The ENT Department provides treatment for ear infections, hearing issues, sinus problems, throat infections, and balance disorders. ENT consultations are available during regular outpatient timings.
+
+The hospital maintains electronic medical records for registered patients to improve continuity of care and treatment history management. Patients can request copies of reports and discharge summaries through the medical records department.
+
+Discharge procedures generally require final billing clearance, physician approval, medication counseling, and follow up appointment scheduling before patients leave the hospital.
+
+Patients are encouraged to arrive at least fifteen minutes before scheduled appointments for registration and queue management. Delayed arrivals may result in appointment rescheduling depending on doctor availability.
+
+Smoking is strictly prohibited inside all hospital buildings including waiting areas, corridors, and patient rooms. Designated smoking areas are available outside the main facility.
+
+The hospital security department operates twenty four hours and monitors visitor entry points, parking facilities, emergency exits, and restricted access areas to ensure patient and staff safety.
+
+Medical fitness certificates and routine health screening packages are available for employment, travel, university admissions, and annual corporate health assessments.
+
+The hospital provides home healthcare services for selected patients requiring nursing care, physiotherapy, medication administration, or post operative monitoring at home.
+
+Telemedicine consultations are available for selected departments where patients can consult doctors remotely through scheduled video appointments.
+
+Patients requiring surgical procedures are advised to follow pre operative instructions including fasting requirements, medication restrictions, and arrival timing guidelines provided by the surgical team.
+
+The hospital follows strict infection prevention and sterilization protocols in operating rooms, ICUs, laboratories, and patient care areas to maintain patient safety standards.
+
+The customer support desk assists patients with appointment guidance, complaint resolution, department navigation, billing questions, and general hospital information throughout operational hours.

@@ -35,30 +35,40 @@ DEFAULT_QA: list[dict] = [
             "when is the hospital open",
             "what time does the hospital open",
             "what time does the hospital close",
-            "are you open on weekends",
             "hospital opening hours",
-            "what are the visiting hours"
+            "are you open twenty four hours",
+            "is the hospital open at night"
         ],
-        "answer": "The hospital operates twenty four hours a day. Visitor hours are from 5 PM to 8 PM daily."
+        "answer": "The hospital operates twenty four hours a day including weekends and public holidays."
+    },
+
+    {
+        "questions": [
+            "what are the visitor timings",
+            "when can visitors come",
+            "visitor hours",
+            "what time can i visit patients",
+            "when are visitors allowed"
+        ],
+        "answer": "Visitor timings are from 5 PM to 8 PM daily."
     },
 
     {
         "questions": [
             "when is the cardiologist available",
             "cardiology timings",
-            "what time does the heart doctor come",
-            "cardiologist availability",
-            "when can i visit the cardiologist",
-            "heart specialist timings"
+            "heart specialist timings",
+            "what time does the cardiologist come",
+            "cardiology department hours"
         ],
         "answer": "The cardiology specialist is available Monday to Friday from 9 AM to 1 PM."
     },
 
     {
         "questions": [
-            "what are the orthopedic doctor timings",
-            "orthopedic availability",
+            "what are the orthopedic timings",
             "bone specialist timings",
+            "orthopedic doctor availability",
             "when is the orthopedic doctor available",
             "orthopedic department timings"
         ],
@@ -67,13 +77,46 @@ DEFAULT_QA: list[dict] = [
 
     {
         "questions": [
+            "what are the pediatrician timings",
+            "children doctor timings",
+            "pediatrics clinic hours",
+            "when is the pediatrician available",
+            "kids doctor availability"
+        ],
+        "answer": "The Pediatrics clinic operates daily from 10 AM to 8 PM including Saturdays."
+    },
+
+    {
+        "questions": [
             "what is the opd fee",
             "general consultation charges",
-            "how much is the opd consultation",
+            "general opd charges",
             "doctor consultation fee",
-            "general opd charges"
+            "how much is general consultation"
         ],
         "answer": "The general OPD consultation fee is 1500 Pakistani Rupees."
+    },
+
+    {
+        "questions": [
+            "what are the cardiology charges",
+            "cardiologist fee",
+            "heart specialist consultation fee",
+            "how much does cardiology consultation cost",
+            "cardiology consultation charges"
+        ],
+        "answer": "Cardiology consultation costs 3500 Pakistani Rupees per visit."
+    },
+
+    {
+        "questions": [
+            "what are the orthopedic consultation charges",
+            "orthopedic fee",
+            "bone specialist fee",
+            "how much is orthopedic consultation",
+            "orthopedic doctor charges"
+        ],
+        "answer": "Orthopedic consultation costs 3000 Pakistani Rupees per visit."
     },
 
     {
@@ -89,24 +132,68 @@ DEFAULT_QA: list[dict] = [
 
     {
         "questions": [
+            "is the emergency open twenty four hours",
+            "emergency department timings",
+            "when is emergency open",
+            "is emergency available at night",
+            "emergency availability"
+        ],
+        "answer": "The Emergency Department operates twenty four hours every day."
+    },
+
+    {
+        "questions": [
             "is the pharmacy open at night",
             "pharmacy timings",
-            "when does the pharmacy close",
             "hospital pharmacy hours",
-            "is pharmacy open twenty four hours"
+            "when does the pharmacy close",
+            "is the pharmacy open twenty four hours"
         ],
-        "answer": "The hospital pharmacy is open twenty four hours every day."
+        "answer": "The hospital pharmacy remains open twenty four hours every day."
+    },
+
+    {
+        "questions": [
+            "what are the laboratory timings",
+            "lab timings",
+            "when is sample collection available",
+            "pathology timings",
+            "lab collection hours"
+        ],
+        "answer": "Laboratory sample collection is available daily from 7 AM to 10 PM."
+    },
+
+    {
+        "questions": [
+            "what are the mri timings",
+            "mri availability",
+            "when can i get an mri scan",
+            "radiology timings",
+            "mri department hours"
+        ],
+        "answer": "MRI services are available daily from 9 AM to 9 PM and require prior appointment."
     },
 
     {
         "questions": [
             "how can i book an appointment",
             "appointment booking process",
-            "how do i schedule a doctor appointment",
+            "how do i schedule an appointment",
             "can i book through the kiosk",
-            "ways to book appointment"
+            "ways to book doctor appointment"
         ],
-        "answer": "Appointments can be booked through the reception desk, hospital website, or self service kiosk."
+        "answer": "Appointments can be booked through the reception desk, self service kiosk, website, or mobile application."
+    },
+
+    {
+        "questions": [
+            "do you accept walk in patients",
+            "can i come without appointment",
+            "walk in policy",
+            "is appointment necessary",
+            "can i visit directly"
+        ],
+        "answer": "Walk in patients are accepted depending on doctor availability and queue capacity."
     },
 
     {
@@ -117,7 +204,7 @@ DEFAULT_QA: list[dict] = [
             "what should i bring for admission",
             "patient admission process"
         ],
-        "answer": "Patients must provide a valid CNIC, previous medical records, and insurance information during admission."
+        "answer": "Patients must provide a valid CNIC, previous medical records, insurance information, and emergency contact details during admission."
     },
 
     {
@@ -128,20 +215,165 @@ DEFAULT_QA: list[dict] = [
             "can i use insurance here",
             "insurance coverage information"
         ],
-        "answer": "The hospital accepts major insurance providers including Jubilee Insurance, EFU Health, and State Life."
+        "answer": "The hospital accepts Jubilee Insurance, EFU Health, State Life, Adamjee Insurance, and selected corporate healthcare plans."
     },
 
     {
         "questions": [
-            "what are the lab timings",
-            "laboratory timings",
-            "when is sample collection available",
-            "lab collection hours",
-            "pathology timings"
+            "what payment methods are accepted",
+            "can i pay with card",
+            "payment options",
+            "do you accept digital wallets",
+            "billing payment methods"
         ],
-        "answer": "Laboratory sample collection is available daily from 7 AM to 10 PM."
+        "answer": "The hospital accepts cash, debit cards, credit cards, bank transfers, and selected digital wallet services."
+    },
+
+    {
+        "questions": [
+            "what are the vaccination center timings",
+            "vaccination timings",
+            "when is vaccination available",
+            "vaccine center hours",
+            "immunization timings"
+        ],
+        "answer": "The vaccination center operates Monday to Saturday from 9 AM to 5 PM."
+    },
+
+    {
+        "questions": [
+            "do you provide ambulance service",
+            "ambulance availability",
+            "can i request ambulance",
+            "emergency transport service",
+            "ambulance support"
+        ],
+        "answer": "The hospital provides ambulance services within city limits with trained emergency staff and medical support equipment."
+    },
+
+    {
+        "questions": [
+            "what are the dental clinic timings",
+            "dentist timings",
+            "dental department hours",
+            "when is dental clinic open",
+            "tooth doctor timings"
+        ],
+        "answer": "The dental clinic operates Monday to Saturday from 10 AM to 6 PM."
+    },
+
+    {
+        "questions": [
+            "what are the cafeteria timings",
+            "hospital cafeteria hours",
+            "when is cafeteria open",
+            "food court timings",
+            "canteen timings"
+        ],
+        "answer": "The hospital cafeteria operates daily from 7 AM until midnight."
+    },
+
+    {
+        "questions": [
+            "is parking available",
+            "parking information",
+            "where can i park",
+            "visitor parking",
+            "parking facility availability"
+        ],
+        "answer": "Parking facilities are available in Basement Levels 1 and 2 with hourly parking charges."
+    },
+
+    {
+        "questions": [
+            "do you provide wheelchair assistance",
+            "wheelchair availability",
+            "mobility support",
+            "can i get a wheelchair",
+            "patient wheelchair service"
+        ],
+        "answer": "Wheelchair assistance is available at all major entrances and reception areas free of charge."
+    },
+
+    {
+        "questions": [
+            "what are the dialysis timings",
+            "dialysis availability",
+            "kidney treatment timings",
+            "dialysis department hours",
+            "when is dialysis available"
+        ],
+        "answer": "The dialysis unit operates in multiple scheduled shifts throughout the week."
+    },
+
+    {
+        "questions": [
+            "do you offer telemedicine",
+            "online doctor consultation",
+            "virtual appointments",
+            "remote consultation service",
+            "video consultation availability"
+        ],
+        "answer": "Telemedicine consultations are available for selected departments through scheduled video appointments."
+    },
+
+    {
+        "questions": [
+            "is smoking allowed inside hospital",
+            "hospital smoking policy",
+            "can i smoke in hospital",
+            "smoking rules",
+            "designated smoking areas"
+        ],
+        "answer": "Smoking is strictly prohibited inside hospital buildings. Designated smoking areas are available outside the facility."
+    },
+
+    {
+        "questions": [
+            "what are the physiotherapy timings",
+            "physiotherapy department hours",
+            "rehabilitation services",
+            "physical therapy availability",
+            "physiotherapy appointments"
+        ],
+        "answer": "The physiotherapy department provides scheduled rehabilitation and therapy sessions throughout regular outpatient hours."
+    },
+
+    {
+        "questions": [
+            "do you have blood bank service",
+            "blood bank timings",
+            "blood donation availability",
+            "blood transfusion support",
+            "is blood bank open twenty four hours"
+        ],
+        "answer": "The blood bank operates twenty four hours for emergency transfusion support and blood donation services."
+    },
+
+    {
+        "questions": [
+            "how early should i arrive for appointment",
+            "appointment arrival time",
+            "when should i come before appointment",
+            "early arrival policy",
+            "registration timing before appointment"
+        ],
+        "answer": "Patients are advised to arrive at least fifteen minutes before their scheduled appointment."
+    },
+
+    {
+        "questions": [
+            "are masks required in hospital",
+            "mask policy",
+            "do i need to wear mask",
+            "hospital covid policy",
+            "mask requirement in icu"
+        ],
+        "answer": "Masks are mandatory in intensive care units and recommended throughout the hospital premises."
     }
 ]
+
+
 
 
 
