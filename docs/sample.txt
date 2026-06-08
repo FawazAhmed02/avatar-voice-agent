@@ -1,119 +1,23 @@
-WaveTec InfoPoint — Smart Lobby Kiosk
-======================================
+The hospital provides twenty four hour emergency and pharmacy services for all patients and visitors. Emergency consultation charges vary depending on the severity of the medical condition, while the pharmacy remains open throughout the day and night to ensure uninterrupted access to medicines and emergency supplies.
 
-Welcome to WaveTec InfoPoint, the intelligent self-service information kiosk
-serving WaveTec Tower, 1 Innovation Drive, Silicon Bay, CA 94025.
+The Cardiology Department provides consultation and diagnostic services for heart related conditions. The cardiology specialist is available from Monday to Friday between 9 AM and 1 PM. Patients experiencing chest pain, high blood pressure, or other cardiac symptoms are encouraged to schedule an appointment in advance.
 
-ABOUT WAVETEC INFOPOINT
-------------------------
-WaveTec InfoPoint is an AI-powered lobby kiosk designed to help visitors,
-employees, and guests quickly find the information they need. The kiosk
-supports voice interaction, touchscreen navigation, and printed directions.
-Our system operates entirely offline to protect your privacy — no voice data
-is sent to external servers.
+The Orthopedic Department specializes in bone, joint, and muscle related treatments. Orthopedic consultations are available on weekdays from 2 PM to 6 PM. The department also provides fracture management, physiotherapy referrals, and post surgery follow up care.
 
-HOURS OF OPERATION
--------------------
-Monday through Friday:  8:00 AM – 8:00 PM
-Saturday:               10:00 AM – 4:00 PM
-Sunday:                 Closed
-Public Holidays:        Closed (see posted holiday schedule near main entrance)
+The Pediatrics clinic offers healthcare services for infants, children, and teenagers. Pediatric consultations are available daily from 10 AM to 8 PM including Saturdays. The department provides vaccination services, routine checkups, and treatment for common childhood illnesses.
 
-After-hours emergencies: contact Building Security at extension 0 or
-call +1 (415) 555-0100.
+The hospital laboratory provides diagnostic testing and sample collection services every day from 7 AM until 10 PM. Common laboratory services include blood tests, urine analysis, COVID screening, and routine diagnostic panels. Most reports are available digitally through the patient portal.
 
-SERVICES OFFERED
------------------
-1. Visitor Registration
-   Check in for appointments, receive visitor badges, and notify your host.
-   Bring a government-issued photo ID. Pre-registered visitors can use the
-   Fast Check-In lane (touch the star icon on the kiosk home screen).
+MRI and radiology services are available daily between 9 AM and 9 PM. MRI scans require prior appointment booking, while X ray and ultrasound services are available for walk in patients depending on queue availability.
 
-2. Wayfinding & Directions
-   Search for any office, meeting room, amenity, or department within
-   WaveTec Tower. The kiosk can print a floor map or send directions to
-   your mobile phone via SMS (charges may apply from your carrier).
+Patients can book appointments through the hospital reception desk, online portal, or self service kiosk. Walk in patients are also accepted depending on doctor availability and current queue capacity.
 
-3. Building Directory
-   Browse the full employee and department directory. Filter by floor,
-   department name, or employee name. Privacy mode hides personal phone
-   extensions for security.
+The hospital accepts multiple payment methods including cash, debit cards, credit cards, and digital wallet payments. Major insurance providers including Jubilee Insurance, EFU Health, and State Life are also accepted for eligible treatments and consultations.
 
-4. Meeting Room Booking
-   Check real-time meeting room availability and book a room for up to
-   two hours (employee badge required). Rooms are located on floors 3–8.
-   Amenities vary by room: whiteboards, video conferencing, and catering
-   can be arranged through the Facilities desk on Floor 2.
+Visitor timings are from 5 PM to 8 PM daily. Visitors are encouraged to follow hospital safety guidelines and maintain silence in patient care areas. Masks are mandatory in intensive care units and recommended throughout the hospital premises.
 
-5. Concierge Services
-   Request a taxi or rideshare pickup from the North Entrance drop-off zone.
-   Order lobby refreshments (coffee, water, snacks) delivered to your
-   meeting room. Luggage storage is available at the concierge desk,
-   Lobby Level, Suite 1A.
+Patients seeking hospital admission must provide a valid CNIC, previous medical records, and insurance information where applicable. The admissions department operates twenty four hours and assists patients with room allocation, billing, and admission formalities.
 
-6. Accessibility Assistance
-   WaveTec InfoPoint supports screen-reader mode, high-contrast display,
-   and voice-only navigation. Press the blue Accessibility button at the
-   bottom-left of the kiosk screen at any time to switch modes.
-   A human concierge is always on duty Monday–Friday 9 AM–5 PM.
+The vaccination center provides childhood and adult immunization services from Monday to Saturday between 9 AM and 5 PM. Vaccines for hepatitis, influenza, tetanus, and routine childhood immunizations are available.
 
-FREQUENTLY ASKED QUESTIONS
-----------------------------
-
-Q: Where is parking?
-A: Visitor parking is in the underground garage, Level B1–B3. Enter from
-   Innovation Drive (south side). The first 90 minutes are free; after that
-   the rate is $4 per hour capped at $20 per day. Electric vehicle charging
-   stations are available on Level B1, spaces EV-01 through EV-12.
-
-Q: How do I reach a specific company or tenant?
-A: Use the Building Directory service on this kiosk, or ask me by saying
-   the company name out loud. I will display their floor, suite number,
-   and main contact number.
-
-Q: Is there Wi-Fi for visitors?
-A: Yes. Connect to the network named "WaveTec-Guest". The password
-   changes weekly; ask reception or request it here on the kiosk under
-   Services → Guest Wi-Fi.
-
-Q: Where is the nearest coffee shop?
-A: The WaveTec Café is on the Lobby Level, open 7 AM–6 PM weekdays.
-   The nearest external coffee shop is Brewed Awakening, 0.2 miles north
-   on Innovation Drive (a 4-minute walk).
-
-Q: What should I do in an emergency?
-A: In case of fire or medical emergency, dial 911 immediately, then
-   Building Security at extension 0. Emergency exits are located at the
-   north and south ends of every floor. Assembly point is the Innovation
-   Drive plaza, 50 metres from the main entrance.
-
-DIRECTIONS TO WAVETEC TOWER
------------------------------
-By Public Transit:
-  – Silicon Bay BART station: Exit Gate C, walk east on Harbor Blvd for
-    0.4 miles; WaveTec Tower is on the left.
-  – Bus routes 22, 45, and 88 stop directly in front of the building
-    (Innovation Drive & Harbor Blvd intersection).
-
-By Car (Northbound):
-  – Take Highway 101 North, exit at Silicon Bay Blvd (Exit 407B).
-  – Turn right onto Harbor Blvd, then left onto Innovation Drive.
-  – WaveTec Tower is the glass high-rise at 1 Innovation Drive on your right.
-
-By Car (Southbound):
-  – Take Highway 101 South, exit at Silicon Bay Blvd (Exit 407A).
-  – Turn left onto Harbor Blvd, then left onto Innovation Drive.
-  – WaveTec Tower is on your right approximately 0.3 miles ahead.
-
-CONTACT & FEEDBACK
--------------------
-WaveTec InfoPoint Support: kiosk-support@wavetec.example.com
-Building Management:        facilities@wavetec.example.com
-Phone (main switchboard):   +1 (415) 555-0200
-Website:                    https://infopoint.wavetec.example.com
-
-To report a kiosk malfunction, press [HELP] or speak: "Call for help."
-We appreciate your feedback — tap the star rating icon on the home screen
-after your session to leave a quick review.
-
-Thank you for visiting WaveTec Tower. Have a productive day!
+Parking facilities are available in Basement Levels 1 and 2 for visitors and patients. Parking charges are calculated on an hourly basis, and valet parking is available during peak hospital hours.

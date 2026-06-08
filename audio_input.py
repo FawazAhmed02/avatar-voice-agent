@@ -60,24 +60,19 @@ _vad_utils = None
 
 
 def _load_silero_vad():
-    """Load the Silero VAD model from torch.hub (cached after first load)."""
+    """Load the Silero VAD model from the local silero-vad package (no internet required)."""
     global _vad_model, _vad_utils
     if _vad_model is not None:
         return _vad_model, _vad_utils
 
-    torch = _import_torch()
-    logger.info("Loading Silero VAD model from torch.hub …")
+    logger.info("Loading Silero VAD model…")
     try:
-        model, utils = torch.hub.load(
-            repo_or_dir="snakers4/silero-vad",
-            model="silero_vad",
-            force_reload=False,
-            onnx=False,
-        )
+        from silero_vad import load_silero_vad  # bundled with the package, fully offline
+        model = load_silero_vad()
         _vad_model = model
-        _vad_utils = utils
+        _vad_utils = None
         logger.info("Silero VAD model loaded.")
-        return model, utils
+        return model, None
     except Exception as exc:
         logger.error("Failed to load Silero VAD: %s", exc)
         raise
@@ -141,7 +136,6 @@ class VADStream:
     def start(self) -> None:
         """Open the microphone stream and start capturing audio."""
         sd = _import_sounddevice()
-        torch = _import_torch()
 
         self._vad_model, self._vad_utils = _load_silero_vad()
         self._running = True

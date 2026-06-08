@@ -29,124 +29,121 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 DEFAULT_QA: list[dict] = [
-    # Hours
     {
         "questions": [
-            "what are your hours",
-            "when are you open",
-            "what time do you open",
-            "what time do you close",
+            "what are your hospital timings",
+            "when is the hospital open",
+            "what time does the hospital open",
+            "what time does the hospital close",
             "are you open on weekends",
-            "opening hours",
-            "what are the opening times",
+            "hospital opening hours",
+            "what are the visiting hours"
         ],
-        "answer": "We are open Monday to Friday from 9 AM to 6 PM, and Saturday from 10 AM to 4 PM. We are closed on Sundays.",
+        "answer": "The hospital operates twenty four hours a day. Visitor hours are from 5 PM to 8 PM daily."
     },
-    # Location
+
     {
         "questions": [
-            "where are you located",
-            "where is this kiosk",
-            "what floor are you on",
-            "how do I find you",
-            "where is wavetec",
-            "where is the office",
+            "when is the cardiologist available",
+            "cardiology timings",
+            "what time does the heart doctor come",
+            "cardiologist availability",
+            "when can i visit the cardiologist",
+            "heart specialist timings"
         ],
-        "answer": "The WaveTec InfoPoint kiosk is located in the main lobby of Tower A, near the entrance.",
+        "answer": "The cardiology specialist is available Monday to Friday from 9 AM to 1 PM."
     },
-    # Services
+
     {
         "questions": [
-            "what services do you offer",
-            "what can you help me with",
-            "what do you do",
-            "how can you help me",
-            "what is this kiosk for",
-            "what can this kiosk do",
+            "what are the orthopedic doctor timings",
+            "orthopedic availability",
+            "bone specialist timings",
+            "when is the orthopedic doctor available",
+            "orthopedic department timings"
         ],
-        "answer": "I can help with visitor registration, building wayfinding, event information, and general questions about WaveTec InfoPoint.",
+        "answer": "The orthopedic specialist is available on weekdays from 2 PM to 6 PM."
     },
-    # WiFi
+
     {
         "questions": [
-            "what is the wifi password",
-            "how do I connect to wifi",
-            "how do I connect to the internet",
-            "do you have wifi",
-            "internet access",
-            "wireless network",
-            "how do I get internet",
-            "wifi network",
+            "what is the opd fee",
+            "general consultation charges",
+            "how much is the opd consultation",
+            "doctor consultation fee",
+            "general opd charges"
         ],
-        "answer": "The guest Wi-Fi network is WaveTec-Guest. Please ask reception for the current password.",
+        "answer": "The general OPD consultation fee is 1500 Pakistani Rupees."
     },
-    # Parking
+
     {
         "questions": [
-            "where can I park",
-            "is there parking",
-            "parking information",
-            "where is the car park",
-            "parking area",
+            "what are the emergency charges",
+            "emergency consultation fee",
+            "how much does emergency cost",
+            "emergency department charges",
+            "emergency fees"
         ],
-        "answer": "Visitor parking is available in the underground car park accessed from Level B1. The first two hours are complimentary.",
+        "answer": "Emergency consultation charges start from 5000 Pakistani Rupees depending on the case."
     },
-    # Contact
+
     {
         "questions": [
-            "what is your phone number",
-            "how do I contact you",
-            "who do I speak to",
-            "reception number",
-            "contact information",
+            "is the pharmacy open at night",
+            "pharmacy timings",
+            "when does the pharmacy close",
+            "hospital pharmacy hours",
+            "is pharmacy open twenty four hours"
         ],
-        "answer": "You can reach our reception desk on the ground floor or call us. Please check the directory board for the current contact numbers.",
+        "answer": "The hospital pharmacy is open twenty four hours every day."
     },
-    # Restrooms
+
     {
         "questions": [
-            "where are the restrooms",
-            "where is the bathroom",
-            "where is the toilet",
-            "where are the toilets",
+            "how can i book an appointment",
+            "appointment booking process",
+            "how do i schedule a doctor appointment",
+            "can i book through the kiosk",
+            "ways to book appointment"
         ],
-        "answer": "Restrooms are located on every floor, next to the elevator lobby.",
+        "answer": "Appointments can be booked through the reception desk, hospital website, or self service kiosk."
     },
-    # Events
+
     {
         "questions": [
-            "what events are on today",
-            "are there any events",
-            "what is happening today",
-            "events schedule",
-            "today's events",
+            "what documents are needed for admission",
+            "admission requirements",
+            "required documents for hospital admission",
+            "what should i bring for admission",
+            "patient admission process"
         ],
-        "answer": "For today's events and bookings, please check the digital notice board in the lobby or speak with reception.",
+        "answer": "Patients must provide a valid CNIC, previous medical records, and insurance information during admission."
     },
-    # Visitor registration
+
     {
         "questions": [
-            "how do I register as a visitor",
-            "visitor registration",
-            "I am here to visit someone",
-            "I have an appointment",
-            "how do I sign in",
+            "does the hospital accept insurance",
+            "insurance providers",
+            "which insurance companies are accepted",
+            "can i use insurance here",
+            "insurance coverage information"
         ],
-        "answer": "Please tap 'Visitor Check-In' on my screen or proceed to the reception desk. You will need a valid ID and the name of your host.",
+        "answer": "The hospital accepts major insurance providers including Jubilee Insurance, EFU Health, and State Life."
     },
-    # Accessibility
+
     {
         "questions": [
-            "is there wheelchair access",
-            "disabled access",
-            "accessibility",
-            "lift location",
-            "where is the elevator",
-            "where is the lift",
+            "what are the lab timings",
+            "laboratory timings",
+            "when is sample collection available",
+            "lab collection hours",
+            "pathology timings"
         ],
-        "answer": "The building is fully accessible. Elevators are located at the centre of each floor and accessible entrances are on the ground level.",
-    },
+        "answer": "Laboratory sample collection is available daily from 7 AM to 10 PM."
+    }
 ]
+
+
 
 
 # ---------------------------------------------------------------------------
@@ -180,12 +177,8 @@ class ResponseCache:
     # ------------------------------------------------------------------
 
     def _get_embedder(self):
-        if self._embedder is None:
-            from sentence_transformers import SentenceTransformer
-            import torch
-            device = "mps" if torch.backends.mps.is_available() else "cpu"
-            self._embedder = SentenceTransformer("all-MiniLM-L6-v2", device=device)
-        return self._embedder
+        from rag_storage import _get_shared_embedder
+        return _get_shared_embedder("all-MiniLM-L6-v2")
 
     def build(self) -> int:
         """Embed all questions and build the FAISS index. No-op if already built."""
@@ -224,6 +217,29 @@ class ResponseCache:
             len(questions), dim, elapsed,
         )
         return len(questions)
+
+    def embed_query(self, query: str) -> np.ndarray:
+        """Encode a single query string and return a normalized float32 vector (shape 1, D)."""
+        embedder = self._get_embedder()
+        return embedder.encode(
+            [query.lower().strip()],
+            show_progress_bar=False,
+            normalize_embeddings=True,
+            convert_to_numpy=True,
+        ).astype(np.float32)
+
+    def lookup_vec(self, query_vec: np.ndarray) -> Optional[str]:
+        """Lookup using a pre-computed query embedding. Returns answer or None."""
+        if self._index is None:
+            return None
+        D, I = self._index.search(query_vec, 1)
+        similarity = float(D[0][0])
+        if similarity >= self._threshold:
+            answer = self._answers[int(I[0][0])]
+            logger.info("Cache HIT  sim=%.3f", similarity)
+            return answer
+        logger.info("Cache MISS sim=%.3f → LLM", similarity)
+        return None
 
     def lookup(self, query: str) -> Optional[str]:
         """

@@ -116,13 +116,19 @@ async def _prewarm_models() -> None:
     console.print("[cyan]Pre-warming models…[/cyan]")
     t0 = time.perf_counter()
 
+    # Force a complete import of transformers in the main thread before concurrent
+    # pre-warms start. sentence-transformers and mlx-lm both import transformers
+    # simultaneously; without this, one thread sees a partially-initialised module
+    # and fails to find AutoTokenizer.
+    await asyncio.to_thread(__import__, "transformers")
+
     async def _load(label: str, fn):
         t = time.perf_counter()
         try:
             await asyncio.to_thread(fn)
             logger.info("Warmed %-20s %.0f ms", label, (time.perf_counter() - t) * 1000)
         except Exception as exc:
-            logger.warning("Pre-warm failed for %s: %s", label, exc)
+            logger.warning("Pre-warm failed for %s: %s", label, exc, exc_info=True)
 
     def _warm_stt():
         import mlx_whisper, numpy as np
@@ -160,6 +166,77 @@ async def _prewarm_models() -> None:
     )
 
     console.print(f"[green]All models ready in {(time.perf_counter()-t0)*1000:.0f} ms — listening.[/green]")
+
+
+# ---------------------------------------------------------------------------
+# Conversational filler detection
+# ---------------------------------------------------------------------------
+
+# Words that can appear anywhere in a short acknowledgment utterance without
+# making it a real question.
+_ACK_WORDS = {
+    "ok", "okay", "alright", "right", "perfect", "great", "nice", "wonderful",
+    "awesome", "cool", "good", "fine", "noted", "understood", "got", "it",
+    "sounds", "i", "see", "much", "very", "so", "a", "lot", "many",
+}
+
+# Terminal phrases that, when they close the utterance, signal a filler.
+_THANKS_PHRASES  = {"thank you", "thanks", "thank you so much", "thanks a lot",
+                    "many thanks", "thank you very much", "cheers", "much appreciated"}
+_BYE_PHRASES     = {"bye", "goodbye", "see you", "see ya", "take care",
+                    "have a good day", "have a nice day", "good day", "farewell"}
+_HELLO_PHRASES   = {"hello", "hi", "hey", "good morning", "good afternoon",
+                    "good evening", "hi there", "hey there", "howdy"}
+_NEUTRAL_PHRASES = {"ok", "okay", "alright", "got it", "i see", "understood",
+                    "noted", "sounds good", "perfect", "great", "nice",
+                    "wonderful", "awesome", "cool", "good", "fine"}
+
+def _is_conversational_filler(text: str) -> str | None:
+    """
+    Return a canned reply if the utterance is pure conversational filler.
+
+    Strategy: strip punctuation, check exact matches first, then check whether
+    the utterance is short (≤8 words) and ends with a known terminal phrase
+    (handles compounds like "okay perfect thank you" or "alright thanks").
+    """
+    # Strip all punctuation from each word so "okay," == "okay"
+    import re as _re
+    normalized = _re.sub(r"[^\w\s]", " ", text.lower()).split()
+    normalized_str = " ".join(normalized)
+
+    # Exact match against known terminal phrases
+    for phrases, reply in (
+        (_THANKS_PHRASES,  "You're welcome! Is there anything else I can help you with?"),
+        (_BYE_PHRASES,     "Goodbye! Have a great day."),
+        (_HELLO_PHRASES,   "Hello! How can I help you today?"),
+        (_NEUTRAL_PHRASES, "Glad I could help. Feel free to ask if you have more questions."),
+    ):
+        if normalized_str in phrases:
+            return reply
+
+    # Short compound acknowledgment: ≤8 words, ends with a known terminal,
+    # and every word belongs to the ack-word vocabulary (no real question).
+    words = normalized
+    if len(words) <= 8 and "?" not in text:
+        # Check if it ends with a 1- or 2-word terminal phrase
+        for terminal, reply in (
+            (_THANKS_PHRASES,  "You're welcome! Is there anything else I can help you with?"),
+            (_BYE_PHRASES,     "Goodbye! Have a great day."),
+            (_HELLO_PHRASES,   "Hello! How can I help you today?"),
+        ):
+            for phrase in terminal:
+                pwords = phrase.split()
+                if words[-len(pwords):] == pwords:
+                    # Make sure all preceding words are benign ack words
+                    prefix_words = words[:-len(pwords)]
+                    if all(w in _ACK_WORDS for w in prefix_words):
+                        return reply
+
+        # Pure ack words with no terminal — e.g. "okay perfect"
+        if all(w in _ACK_WORDS for w in words):
+            return "Glad I could help. Feel free to ask if you have more questions."
+
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -284,8 +361,23 @@ async def rag_stage(state: PipelineState) -> None:
         t0 = time.perf_counter()
         query = item["text"]
 
+        # ── Conversational filler filter (pre-cache, no embedding needed) ─
+        _FILLER_REPLY = _is_conversational_filler(query)
+        if _FILLER_REPLY:
+            await state.ws_broadcast({"type": "transcript", "role": "assistant", "text": _FILLER_REPLY})
+            await state.ws_broadcast({"type": "status", "value": "speaking"})
+            await asyncio.wait_for(
+                state.llm_q.put({"response": _FILLER_REPLY, "t_llm": time.perf_counter()}),
+                timeout=cfg.system.pipeline_timeout_s,
+            )
+            state.stt_q.task_done()
+            continue
+
+        # ── Embed query once, reuse for cache lookup and RAG retrieval ───
+        query_vec = await asyncio.to_thread(cache.embed_query, query)
+
         # ── Cache lookup (fast path) ──────────────────────────────────────
-        cached_answer = await asyncio.to_thread(cache.lookup, query)
+        cached_answer = cache.lookup_vec(query_vec)   # FAISS search is fast inline
         if cached_answer:
             elapsed_ms = (time.perf_counter() - t0) * 1000
             state.latencies["rag"] = elapsed_ms
@@ -304,7 +396,7 @@ async def rag_stage(state: PipelineState) -> None:
 
         # ── Cache miss — full RAG retrieval ──────────────────────────────
         try:
-            chunks = await asyncio.to_thread(engine.retrieve, query, cfg.rag.top_k)
+            chunks = await asyncio.to_thread(engine.retrieve_vec, query_vec, cfg.rag.top_k)
         except Exception as exc:
             logger.error("RAG retrieve error: %s", exc)
             chunks = ["No relevant context found."]
@@ -411,6 +503,10 @@ async def tts_stage(state: PipelineState) -> None:
     engine = TTSEngine(cfg)
     logger.info("TTS stage ready.")
 
+    # Capture the event loop now (we're in the asyncio thread); background
+    # threads spawned later cannot call asyncio.get_event_loop() themselves.
+    _loop = asyncio.get_event_loop()
+
     # Thread-safe counter: how many sentences are still synthesising or playing
     _lock = threading.Lock()
     _in_flight = [0]
@@ -432,7 +528,7 @@ async def tts_stage(state: PipelineState) -> None:
             time.sleep(0.7)
             state.pipeline_busy.clear()
             logger.debug("Pipeline idle — ready for next input")
-            asyncio.get_event_loop().call_soon_threadsafe(
+            _loop.call_soon_threadsafe(
                 lambda: asyncio.ensure_future(state.ws_broadcast({"type": "status", "value": "listening"}))
             )
 

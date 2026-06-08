@@ -20,6 +20,23 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
+# ---------------------------------------------------------------------------
+# Module-level shared embedder singleton (reused by RAGEngine & ResponseCache)
+# ---------------------------------------------------------------------------
+
+_shared_embedder = None
+
+
+def _get_shared_embedder(model_name: str) -> "SentenceTransformer":
+    global _shared_embedder
+    if _shared_embedder is None:
+        from sentence_transformers import SentenceTransformer
+        import torch
+        device = "mps" if torch.backends.mps.is_available() else "cpu"
+        logger.info("Loading shared embedding model: %s on %s", model_name, device)
+        _shared_embedder = SentenceTransformer(model_name, device=device)
+    return _shared_embedder
+
 
 def _get_cfg():
     from config import get_config
@@ -171,22 +188,15 @@ class RAGEngine:
     # ------------------------------------------------------------------
 
     def _get_embedder(self):
-        """Lazy-load the SentenceTransformer model."""
-        if self._embedder is None:
-            try:
-                from sentence_transformers import SentenceTransformer
-            except ImportError as exc:
-                raise ImportError(
-                    "sentence-transformers is not installed. "
-                    "Run: pip install sentence-transformers"
-                ) from exc
-            logger.info("Loading embedding model: %s", self._embedding_model_name)
-            # Use Metal (MPS) on Apple Silicon for ~5x faster encoding
-            import torch
-            device = "mps" if torch.backends.mps.is_available() else "cpu"
-            logger.info("Embedding device: %s", device)
-            self._embedder = SentenceTransformer(self._embedding_model_name, device=device)
-        return self._embedder
+        """Lazy-load the SentenceTransformer model (shared singleton)."""
+        try:
+            from sentence_transformers import SentenceTransformer  # noqa: F401
+        except ImportError as exc:
+            raise ImportError(
+                "sentence-transformers is not installed. "
+                "Run: pip install sentence-transformers"
+            ) from exc
+        return _get_shared_embedder(self._embedding_model_name)
 
     def _embed(self, texts: List[str]) -> np.ndarray:
         """
@@ -377,6 +387,21 @@ class RAGEngine:
         elapsed_ms = (time.perf_counter() - t0) * 1000
         logger.info("RAG retrieve: %d results in %.0f ms for query='%s'", len(results), elapsed_ms, query[:60])
 
+        return results if results else ["No relevant context found."]
+
+    def retrieve_vec(self, query_vec: np.ndarray, top_k: Optional[int] = None) -> List[str]:
+        """Retrieve using a pre-computed query embedding. Same as retrieve() but skips encoding."""
+        if top_k is None:
+            top_k = self._rag_cfg.top_k
+        if self._index is None or self._index.ntotal == 0:
+            return ["No relevant context found."]
+        k = min(top_k, self._index.ntotal)
+        distances, indices = self._index.search(query_vec, k)
+        results = []
+        for dist, idx in zip(distances[0], indices[0]):
+            if idx < 0:
+                continue
+            results.append(self._metadata[idx]["text"])
         return results if results else ["No relevant context found."]
 
     # ------------------------------------------------------------------

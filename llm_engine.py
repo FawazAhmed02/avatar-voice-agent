@@ -53,7 +53,8 @@ def _ensure_model_loaded() -> None:
         from mlx_lm import load  # type: ignore
     except ImportError as exc:
         raise ImportError(
-            "mlx_lm is not installed. Run: pip install mlx-lm"
+            f"mlx_lm import failed ({exc}). "
+            "Make sure you're running inside the conda env: conda activate myenv"
         ) from exc
 
     try:

@@ -1,6 +1,6 @@
 vad:
   threshold: 0.7
-  silence_duration_ms: 280
+  silence_duration_ms: 500
   sample_rate: 16000
   chunk_size: 512
 

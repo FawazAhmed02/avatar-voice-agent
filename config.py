@@ -27,7 +27,7 @@ _CONFIG_FILE = Path(__file__).parent / "config.yaml"
 @dataclass
 class VADConfig:
     threshold: float = 0.7
-    silence_duration_ms: int = 280
+    silence_duration_ms: int = 500
     sample_rate: int = 16000
     chunk_size: int = 512
 
